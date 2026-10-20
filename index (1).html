@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2F7D5B">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<title>Patitas</title>
+<style>
+:root{--bg:#F3F7F4;--ink:#16302B;--muted:#5B7068;--leaf:#2F7D5B;--sun:#F2B33D;--line:#D5E2DB;--card:#fff;--warn:#B5472F}
+@media (prefers-color-scheme:dark){:root{--bg:#0F1D19;--ink:#E6F1EC;--muted:#97B0A5;--leaf:#4FB38A;--line:#25403A;--card:#162822;--warn:#E58468}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 ui-rounded,"Nunito","Segoe UI",system-ui,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+main{max-width:560px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.9rem;margin:8px 0 4px;letter-spacing:-.02em}
+h2{font-size:1.15rem;margin:0 0 8px}
+p{margin:0 0 8px}.muted{color:var(--muted);font-size:.92rem}
+.banner{background:var(--sun);color:#3a2a00;border-radius:14px;padding:10px 14px;font-weight:600;margin:12px 0}
+.banner.end{background:var(--warn);color:#fff}
+form,.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:14px 0}
+label{display:block;font-weight:600;margin:12px 0 4px}
+input,select{width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+input:focus,select:focus,button:focus-visible{outline:3px solid var(--sun);outline-offset:1px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.species{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.species button{padding:10px 0;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);font-size:1.5rem;cursor:pointer}
+.species button[aria-pressed=true]{border-color:var(--leaf);background:var(--leaf)}
+.species button:disabled{opacity:.4;cursor:not-allowed}
+.species small{display:block;font-size:.62rem;color:var(--muted)}
+.species button[aria-pressed=true] small{color:#fff}
+.primary{width:100%;margin-top:16px;padding:14px;border:0;border-radius:14px;background:var(--leaf);color:#fff;font:700 1rem inherit;cursor:pointer}
+.big{font-size:1.6rem;font-weight:800}
+ul{margin:6px 0 0;padding-left:20px}li{margin:3px 0}
+.locked{filter:blur(6px);pointer-events:none;user-select:none}
+.note{font-size:.85rem;color:var(--muted);border-left:4px solid var(--sun);padding-left:10px;margin-top:16px}
+#install{display:none;margin:8px 0;padding:10px;border-radius:12px;border:1.5px dashed var(--leaf);background:none;color:var(--leaf);font:700 .95rem inherit;width:100%;cursor:pointer}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <h1>Patitas</h1>
+  <p class="muted">Cuéntanos de tu mascota y te armamos su rutina de paseo, comida y aseo.</p>
+  <button id="install" type="button">Instalar app en mi celular</button>
+  <div id="banner" class="banner" hidden></div>
+
+  <form id="form">
+    <label id="lblSp">¿Qué mascota tienes?</label>
+    <div class="species" role="group" aria-labelledby="lblSp" id="species">
+      <button type="button" data-sp="perro" aria-pressed="true">🐶<small>Perro</small></button>
+      <button type="button" data-sp="gato" aria-pressed="false">🐱<small>Gato</small></button>
+      <button type="button" disabled>🐹<small>Pronto</small></button>
+      <button type="button" disabled>🦜<small>Pronto</small></button>
+      <button type="button" disabled>🐴<small>Pronto</small></button>
+    </div>
+
+    <label for="nombre">Nombre</label>
+    <input id="nombre" required maxlength="30" placeholder="Luna">
+    <div class="row">
+      <div><label for="peso">Peso (kg)</label><input id="peso" type="number" step="0.1" min="0.3" max="90" required></div>
+      <div><label for="edad">Edad (meses)</label><input id="edad" type="number" min="1" max="300" required placeholder="24"></div>
+    </div>
+    <div class="row">
+      <div><label for="sexo">Sexo</label><select id="sexo"><option value="m">Macho</option><option value="h">Hembra</option></select></div>
+      <div><label for="est">Esterilizado/a</label><select id="est"><option value="si">Sí</option><option value="no">No</option></select></div>
+    </div>
+    <div class="row">
+      <div><label for="act">Actividad</label><select id="act"><option value="b">Baja</option><option value="m" selected>Normal</option><option value="a">Alta</option></select></div>
+      <div><label for="cuerpo">Condición</label><select id="cuerpo"><option value="i">Peso ideal</option><option value="s">Sobrepeso</option><option value="d">Delgado/a</option></select></div>
+    </div>
+    <div class="row">
+      <div><label for="pelo">Pelaje</label><select id="pelo"><option value="c">Corto</option><option value="l">Largo</option><option value="r">Rizado</option><option value="d">Doble capa</option></select></div>
+      <div id="preWrap"><label for="pre">¿Gestante?</label><select id="pre"><option value="no">No</option><option value="1">Sí, primeras semanas</option><option value="2">Sí, último tercio</option></select></div>
+    </div>
+    <button class="primary" type="submit">Ver su plan</button>
+  </form>
+
+  <section id="out" hidden></section>
+  <p class="note">Orientación general, no sustituye al veterinario. Consulta siempre con uno ante enfermedad, gestación o cambios de peso importantes.</p>
+</main>
+
+<script>
+const TRIAL_DAYS = 7;
+const STRIPE_PAYMENT_LINK = ""; // pega aquí tu Payment Link de Stripe
+let sp = "perro";
+const $ = id => document.getElementById(id);
+
+// ---- Prueba gratis (prototipo: se guarda en el dispositivo) ----
+function store(k, v){ try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k, v);}catch(e){return null;} }
+function trialLeft(){
+  let s = store("trialStart");
+  if(!s){ s = String(Date.now()); store("trialStart", s); }
+  const used = (Date.now() - Number(s)) / 864e5;
+  return Math.max(0, Math.ceil(TRIAL_DAYS - used));
+}
+function renderBanner(){
+  const left = trialLeft(), b = $("banner");
+  b.hidden = false;
+  if(left > 0){ b.className = "banner"; b.textContent = "Prueba gratis: te quedan " + left + (left === 1 ? " día." : " días."); }
+  else { b.className = "banner end"; b.textContent = "Tu semana gratis terminó. Suscríbete para seguir viendo los planes."; }
+}
+
+// ---- Motor de recomendaciones ----
+function plan(d){
+  const perro = d.sp === "perro";
+  const rer = 70 * Math.pow(d.peso, .75);
+  let etapa, f;
+  if(d.edad < 4){ etapa = "cachorro pequeño"; f = perro ? 3 : 2.5; }
+  else if(d.edad < 12){ etapa = perro ? "cachorro" : "gatito"; f = perro ? 2 : 2.5; }
+  else if(d.edad >= (perro ? 84 : 120)){ etapa = "senior"; f = perro ? 1.4 : 1.1; }
+  else { etapa = "adulto"; f = perro ? (d.est==="si"?1.6:1.8) : (d.est==="si"?1.2:1.4); }
+  let kcal = rer * f;
+  kcal *= {b:.9, m:1, a:1.2}[d.act];
+  if(d.cuerpo === "s") kcal *= .8;
+  if(d.cuerpo === "d") kcal *= 1.15;
+  if(d.sexo === "h" && d.pre === "2") kcal *= 1.35;
+  kcal = Math.round(kcal / 10) * 10;
+  const gramos = Math.round(kcal / 3.5 / 5) * 5; // croqueta ~3500 kcal/kg
+  const comidas = d.edad < 4 ? (perro?4:4) : d.edad < 12 ? 3 : perro ? 2 : 3;
+
+  const paseo = [];
+  if(perro){
+    if(d.edad < 12) paseo.push("Paseos cortos: unos " + Math.max(5, Math.round(d.edad*5/2)) + " min, dos veces al día (regla de 5 min por mes de edad).");
+    else {
+      let m = d.peso < 10 ? 30 : d.peso < 25 ? 60 : 90;
+      m *= {b:.7, m:1, a:1.3}[d.act]; if(etapa==="senior") m *= .7;
+      paseo.push("Ejercicio total al día: unos " + Math.round(m/5)*5 + " min, repartidos en 2 paseos.");
+    }
+    paseo.push("Añade juego de olfato (esconder premios) 10 min para bajar la ansiedad.");
+    if(d.cuerpo==="s") paseo.push("Sobrepeso: sube el tiempo poco a poco y evita calor fuerte.");
+  } else {
+    paseo.push("2 o 3 sesiones de juego de 10–15 min (caña con plumas, bolitas).");
+    paseo.push("Rascador alto y ventanas con vista para enriquecer su espacio.");
+    paseo.push("Un arnés y paseos cortos son opcionales, solo si se adapta con calma.");
+  }
+
+  const nutri = [
+    "Unos " + gramos + " g/día de croqueta de ~3500 kcal/kg, en " + comidas + " comidas. Ajusta según la bolsa de tu alimento.",
+    etapa.includes("cachorro")||etapa==="gatito" ? "Usa alimento específico para crecimiento." : etapa==="senior" ? "Usa alimento senior; revisa articulaciones y dientes con tu vet." : "Alimento completo y balanceado para adultos.",
+    "Agua fresca siempre." + (perro?"":" En gatos, mezclar comida húmeda ayuda a los riñones."),
+    perro ? "Evita chocolate, uvas, pasas, cebolla, ajo y xilitol." : "Evita cebolla, ajo, chocolate, uvas, pasas y lirios (muy tóxicos).",
+    "Pésale cada 2 semanas: si sube o baja más de 5%, ajusta o consulta al vet."
+  ];
+  if(d.sexo==="h" && d.pre==="1") nutri.push("Gestación temprana: mantén la ración; sube gradualmente desde la semana 5–6 con el vet.");
+  if(d.sexo==="h" && d.pre==="2") nutri.push("Último tercio: ración ~35% mayor, más comidas pequeñas y alimento de crecimiento (como indique tu vet). Prepara el parto con tu veterinario.");
+
+  const uñas = perro ? "Cada 2–4 semanas." : "Cada 2–3 semanas.";
+  const pelo = {
+    c:"Cepillado 1–2 veces por semana. Normalmente no requiere corte.",
+    l:"Cepillado diario para evitar nudos. Corte o arreglo cada 6–8 semanas.",
+    r:"Cepillado diario. Corte cada 4–6 semanas para evitar nudos.",
+    d:"Cepillado 2–3 veces por semana (diario en muda). No lo rasures: protege su temperatura."
+  }[d.pelo];
+  const calma = d.act==="a" ? "Con actividad alta, más ejercicio mental ayuda a evitar destrozos y ansiedad." : "Rutinas fijas de comida y paseo, y un rincón tranquilo, reducen la ansiedad.";
+  return {etapa, kcal, nutri, paseo, uñas, pelo, calma};
+}
+
+function li(arr){ return "<ul>" + arr.map(t => "<li>" + t.replace(/[<>&]/g, "") + "</li>").join("") + "</ul>"; }
+
+function render(d){
+  const p = plan(d), nombre = d.nombre.replace(/[<>&]/g, "");
+  const locked = trialLeft() === 0;
+  const html =
+    '<div class="card"><h2>Plan de ' + nombre + '</h2><p class="muted">Etapa: ' + p.etapa + '</p><p class="big">' + p.kcal + ' kcal/día</p></div>' +
+    '<div class="card"><h2>🍽️ Comida</h2>' + li(p.nutri) + '</div>' +
+    '<div class="card"><h2>' + (d.sp==="perro"?"🦮 Paseo y ejercicio":"🧶 Juego y ejercicio") + '</h2>' + li(p.paseo) + '</div>' +
+    '<div class="card"><h2>✂️ Aseo</h2>' + li(["Uñas: " + p.uñas, "Pelaje: " + p.pelo]) + '</div>' +
+    '<div class="card"><h2>😌 Tranquilidad</h2><p>' + p.calma + '</p></div>';
+  const out = $("out");
+  out.hidden = false;
+  out.innerHTML = '<div id="plan" class="' + (locked?"locked":"") + '">' + html + '</div>' +
+    (locked ? '<button class="primary" id="sub" type="button">Suscribirme</button>' : "");
+  if(locked) $("sub").onclick = () => STRIPE_PAYMENT_LINK ? (location.href = STRIPE_PAYMENT_LINK) : alert("Falta conectar tu enlace de pago de Stripe (STRIPE_PAYMENT_LINK).");
+  out.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion:reduce)").matches ? "auto" : "smooth"});
+}
+
+$("species").onclick = e => {
+  const b = e.target.closest("button[data-sp]"); if(!b) return;
+  sp = b.dataset.sp;
+  document.querySelectorAll("#species button[data-sp]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+};
+$("sexo").onchange = () => { $("preWrap").hidden = $("sexo").value !== "h"; };
+$("preWrap").hidden = true;
+$("form").onsubmit = e => {
+  e.preventDefault();
+  const d = {sp, nombre:$("nombre").value, peso:+$("peso").value, edad:+$("edad").value, sexo:$("sexo").value, est:$("est").value,
+             act:$("act").value, cuerpo:$("cuerpo").value, pelo:$("pelo").value, pre:$("sexo").value==="h" ? $("pre").value : "no"};
+  store("mascota", JSON.stringify(d));
+  renderBanner(); render(d);
+};
+
+// ---- Instalación PWA ----
+let deferred;
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; $("install").style.display = "block"; });
+$("install").onclick = async () => { if(!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $("install").style.display = "none"; };
+if("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(()=>{}));
+
+renderBanner();
+</script>
+</body>
+</html>
