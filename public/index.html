@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2F7D5B">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<link rel="stylesheet" href="/style.css">
+<title>Patitas</title>
+</head>
+<body>
+<main>
+  <h1>Patitas</h1>
+  <p class="muted">Cuéntanos de tu mascota y te armamos su plan de comida, paseo y aseo.</p>
+  <button id="install" type="button" hidden>Instalar app en mi celular</button>
+  <div id="banner" class="banner" hidden></div>
+
+  <form id="form">
+    <label id="lblSp">¿Qué mascota tienes?</label>
+    <div class="species" role="group" aria-labelledby="lblSp" id="species">
+      <button type="button" data-sp="perro" aria-pressed="true">🐶<small>Perro</small></button>
+      <button type="button" data-sp="gato" aria-pressed="false">🐱<small>Gato</small></button>
+      <button type="button" disabled>🐹<small>Pronto</small></button>
+      <button type="button" disabled>🦜<small>Pronto</small></button>
+      <button type="button" disabled>🐴<small>Pronto</small></button>
+    </div>
+    <label for="nombre">Nombre</label>
+    <input id="nombre" required maxlength="30" placeholder="Luna">
+    <div class="row">
+      <div><label for="peso">Peso (kg)</label><input id="peso" type="number" step="0.1" min="0.3" max="90" required></div>
+      <div><label for="edad">Edad (meses)</label><input id="edad" type="number" min="1" max="300" required placeholder="24"></div>
+    </div>
+    <div class="row">
+      <div><label for="sexo">Sexo</label><select id="sexo"><option value="m">Macho</option><option value="h">Hembra</option></select></div>
+      <div><label for="est">Esterilizado/a</label><select id="est"><option value="si">Sí</option><option value="no">No</option></select></div>
+    </div>
+    <div class="row">
+      <div><label for="act">Actividad</label><select id="act"><option value="b">Baja</option><option value="m" selected>Normal</option><option value="a">Alta</option></select></div>
+      <div><label for="cuerpo">Condición</label><select id="cuerpo"><option value="i">Peso ideal</option><option value="s">Sobrepeso</option><option value="d">Delgado/a</option></select></div>
+    </div>
+    <div class="row">
+      <div><label for="pelo">Pelaje</label><select id="pelo"><option value="c">Corto</option><option value="l">Largo</option><option value="r">Rizado</option><option value="d">Doble capa</option></select></div>
+      <div id="preWrap" hidden><label for="pre">¿Gestante?</label><select id="pre"><option value="no">No</option><option value="1">Sí, primeras semanas</option><option value="2">Sí, último tercio</option></select></div>
+    </div>
+    <button class="primary" type="submit">Ver su plan</button>
+  </form>
+
+  <section id="paywall" class="card" hidden>
+    <h2>Empieza tus 7 días gratis</h2>
+    <p class="muted">Después se cobra la suscripción mensual. Puedes cancelar cuando quieras.</p>
+    <label for="email">Tu correo</label>
+    <input id="email" type="email" autocomplete="email" placeholder="tu@correo.com">
+    <button class="primary" id="start" type="button">Empezar prueba gratis</button>
+    <p id="payMsg" class="msg" role="status"></p>
+  </section>
+
+  <section id="out" hidden></section>
+  <button id="manage" type="button" hidden>Administrar suscripción</button>
+  <p class="note">Orientación general, no sustituye al veterinario. Consulta siempre con uno ante enfermedad, gestación o cambios de peso importantes.</p>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>

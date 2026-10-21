@@ -1,0 +1,13 @@
+{
+  "name": "patitas-app",
+  "version": "1.0.0",
+  "description": "Patitas: plan de comida, paseo y aseo para tu mascota (PWA + Stripe)",
+  "private": true,
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "express": "^4.21.1",
+    "stripe": "^17.3.1"
+  }
+}
